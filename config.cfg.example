@@ -1,2 +1,12 @@
 [main]
 key = FFFFFFFFFFFF
+door = testing
+
+[fetch]
+endpoint = file://path/to/keyfile
+api_key = myapikeyhere
+
+[db]
+dsn = dbi:SQLite:/path/to/db
+username = test
+password = test

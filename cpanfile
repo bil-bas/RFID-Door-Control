@@ -1,0 +1,10 @@
+requires 'DBIx::Class';
+requires 'DBIx::Class::Candy';
+requires 'SQL::Translator' => '0.11018';
+requires 'LWP::UserAgent';
+requires 'aliased';
+requires 'Moo';
+requires 'namespace::clean';
+requires 'Config::Simple';
+requires 'JSON::MaybeXS';
+requires 'JSON::PP';
