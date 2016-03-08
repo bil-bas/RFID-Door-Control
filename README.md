@@ -5,7 +5,7 @@ This repo contains the code for the RFID Door Control.
 ## Perl Dependencies
 
 To install the perl dependencies you will need cpanminus and carton installed.
-Then, inside this repository directory you run the following:
+Then, inside the Door-Control or Door-Server directory you run the following:
 
 ```
 carton install
