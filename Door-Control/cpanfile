@@ -4,6 +4,7 @@ requires 'SQL::Translator' => '0.11018';
 requires 'LWP::UserAgent';
 requires 'aliased';
 requires 'Moo';
+requires 'MooX::Options';
 requires 'namespace::clean';
 requires 'Config::Simple';
 requires 'JSON::MaybeXS';

@@ -1,13 +1,17 @@
 package LAMM::RFID::DoorControl;
 
 use Moo;
+use MooX::Options;
 use aliased 'LAMM::RFID::DoorControl::Schema';
 use aliased 'LAMM::RFID::DoorControl::Fetch';
 use Config::Simple;
-use namespace::clean;
+use namespace::clean  -except => [qw/_options_data _options_config/];
 
-has config_file => (
+option config_file => (
   is => 'lazy',
+  format => 's',
+  doc => "The config file to use",
+  short => 'c',
   default => 'config.cfg',
 );
 
