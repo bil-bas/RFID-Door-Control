@@ -9,3 +9,4 @@ requires 'namespace::clean';
 requires 'Config::Simple';
 requires 'JSON::MaybeXS';
 requires 'JSON::PP';
+requires 'URI';

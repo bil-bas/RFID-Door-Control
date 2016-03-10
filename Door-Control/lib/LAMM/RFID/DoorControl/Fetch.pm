@@ -22,6 +22,10 @@ has json => (
 has endpoint => (
   is => 'ro',
   required => 1,
+  coerce => sub {
+    # Make sure the endpoint has a trailing slash
+    $_[0] =~ m!/$! ? $_[0] : $_[0] . "/";
+  },
 );
 
 has door => (
@@ -29,10 +33,25 @@ has door => (
   required => 1,
 );
 
+has key => (
+  is => 'ro',
+  required => 1,
+);
+
+has uri => (
+  is => 'lazy',
+  builder => sub {
+    my $self = shift;
+    my $uri = URI->new_abs( $self->door, $self->endpoint );
+    $uri->query_form( key => $self->key );
+    return $uri;
+  },
+);
+
 sub get {
   my $self = shift;
 
-  my $return = $self->ua->get( $self->endpoint . "/" . $self->door );
+  my $return = $self->ua->get( $self->uri );
   return $self->json->decode( $return->decoded_content );
 }
 

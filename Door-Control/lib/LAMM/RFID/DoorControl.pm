@@ -32,6 +32,7 @@ has fetcher => (
     return Fetch->new(
       endpoint => $self->config->{ 'fetch.endpoint' },
       door => $self->config->{ 'main.door' },
+      key => $self->config->{ 'fetch.api_key' },
     );
   },
 );
