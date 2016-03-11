@@ -11,7 +11,7 @@ import sys
 import Adafruit_PN532 as PN532
 
 config = ConfigParser.ConfigParser()
-config.read('config.cfg')
+config.read('../config.cfg')
 
 def get_hex_array ( string ):
   return map( ord, string.decode( "hex" ) )
