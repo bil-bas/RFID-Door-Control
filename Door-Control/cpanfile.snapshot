@@ -65,32 +65,6 @@ DISTRIBUTIONS
       strict 0
       version 0.88
       warnings 0
-  CPAN-Meta-Requirements-2.140
-    pathname: D/DA/DAGOLDEN/CPAN-Meta-Requirements-2.140.tar.gz
-    provides:
-      CPAN::Meta::Requirements 2.140
-    requirements:
-      B 0
-      Carp 0
-      ExtUtils::MakeMaker 6.17
-      perl 5.006
-      strict 0
-      version 0.88
-      warnings 0
-  CPAN-Meta-YAML-0.018
-    pathname: D/DA/DAGOLDEN/CPAN-Meta-YAML-0.018.tar.gz
-    provides:
-      CPAN::Meta::YAML 0.018
-    requirements:
-      B 0
-      Carp 0
-      Exporter 0
-      ExtUtils::MakeMaker 6.17
-      Fcntl 0
-      Scalar::Util 0
-      perl 5.008001
-      strict 0
-      warnings 0
   Capture-Tiny-0.36
     pathname: D/DA/DAGOLDEN/Capture-Tiny-0.36.tar.gz
     provides:
@@ -104,20 +78,6 @@ DISTRIBUTIONS
       IO::Handle 0
       Scalar::Util 0
       perl 5.006
-      strict 0
-      warnings 0
-  Carp-1.38
-    pathname: R/RJ/RJBS/Carp-1.38.tar.gz
-    provides:
-      Carp 1.38
-      Carp::Heavy 1.38
-    requirements:
-      Config 0
-      Exporter 0
-      ExtUtils::MakeMaker 0
-      IPC::Open3 1.0103
-      Test::More 0.47
-      overload 0
       strict 0
       warnings 0
   Carp-Clan-6.04
@@ -237,12 +197,19 @@ DISTRIBUTIONS
       Module::Pluggable 3.01
       Test::More 0
       perl 5.006
-  Config-Simple-4.58
-    pathname: S/SH/SHERZODR/Config-Simple-4.58.tar.gz
+  Config-Tiny-2.23
+    pathname: R/RS/RSAVAGE/Config-Tiny-2.23.tgz
     provides:
-      Config::Simple 4.58
+      Config::Tiny 2.23
     requirements:
       ExtUtils::MakeMaker 0
+      File::Spec 3.3
+      File::Temp 0.22
+      Test::More 0.47
+      UNIVERSAL 0
+      perl v5.8.1
+      strict 0
+      utf8 0
   Context-Preserve-0.01
     pathname: J/JR/JROCKWAY/Context-Preserve-0.01.tar.gz
     provides:
@@ -537,7 +504,6 @@ DISTRIBUTIONS
       Data::Page 2.02
     requirements:
       Class::Accessor::Chained::Fast 0
-      Module::Build 0.35
       Test::Exception 0
       Test::More 0
   Data-Record-0.02
@@ -642,52 +608,6 @@ DISTRIBUTIONS
       perl 5.006
       strict 0
       warnings 0
-  ExtUtils-MakeMaker-7.10
-    pathname: B/BI/BINGOS/ExtUtils-MakeMaker-7.10.tar.gz
-    provides:
-      ExtUtils::Command 7.10
-      ExtUtils::Command::MM 7.10
-      ExtUtils::Liblist 7.10
-      ExtUtils::Liblist::Kid 7.10
-      ExtUtils::MM 7.10
-      ExtUtils::MM_AIX 7.10
-      ExtUtils::MM_Any 7.10
-      ExtUtils::MM_BeOS 7.10
-      ExtUtils::MM_Cygwin 7.10
-      ExtUtils::MM_DOS 7.10
-      ExtUtils::MM_Darwin 7.10
-      ExtUtils::MM_MacOS 7.10
-      ExtUtils::MM_NW5 7.10
-      ExtUtils::MM_OS2 7.10
-      ExtUtils::MM_QNX 7.10
-      ExtUtils::MM_UWIN 7.10
-      ExtUtils::MM_Unix 7.10
-      ExtUtils::MM_VMS 7.10
-      ExtUtils::MM_VOS 7.10
-      ExtUtils::MM_Win32 7.10
-      ExtUtils::MM_Win95 7.10
-      ExtUtils::MY 7.10
-      ExtUtils::MakeMaker 7.10
-      ExtUtils::MakeMaker::Config 7.10
-      ExtUtils::MakeMaker::Locale 7.10
-      ExtUtils::MakeMaker::_version 7.10
-      ExtUtils::MakeMaker::charstar 7.10
-      ExtUtils::MakeMaker::version 7.10
-      ExtUtils::MakeMaker::version::regex 7.10
-      ExtUtils::MakeMaker::version::vpp 7.10
-      ExtUtils::Mkbootstrap 7.10
-      ExtUtils::Mksymlists 7.10
-      ExtUtils::testlib 7.10
-      MM 7.10
-      MY 7.10
-    requirements:
-      Data::Dumper 0
-      DirHandle 0
-      Encode 0
-      File::Basename 0
-      File::Spec 0.8
-      Pod::Man 0
-      perl 5.006
   File-ConfigDir-0.017
     pathname: R/RE/REHSACK/File-ConfigDir-0.017.tar.gz
     provides:
@@ -951,7 +871,6 @@ DISTRIBUTIONS
     provides:
       Lingua::EN::Inflect 1.899
     requirements:
-      ExtUtils::MakeMaker 0
       Test::More 0
   List-MoreUtils-0.413
     pathname: R/RE/REHSACK/List-MoreUtils-0.413.tar.gz
@@ -1087,20 +1006,22 @@ DISTRIBUTIONS
       Try::Tiny 0
       strict 0
       warnings 0
-  Module-Metadata-1.000027
-    pathname: E/ET/ETHER/Module-Metadata-1.000027.tar.gz
+  Module-Pluggable-5.2
+    pathname: S/SI/SIMONW/Module-Pluggable-5.2.tar.gz
     provides:
-      Module::Metadata 1.000027
+      Devel::InnerPackage 0.4
+      Module::Pluggable 5.2
+      Module::Pluggable::Object 5.2
     requirements:
-      Carp 0
+      Exporter 5.57
       ExtUtils::MakeMaker 0
-      Fcntl 0
+      File::Basename 0
       File::Find 0
-      File::Spec 0
-      perl 5.006
+      File::Spec 3.00
+      File::Spec::Functions 0
+      if 0
+      perl 5.00503
       strict 0
-      version 0.87
-      warnings 0
   Module-Runtime-0.014
     pathname: Z/ZE/ZEFRAM/Module-Runtime-0.014.tar.gz
     provides:
@@ -1290,20 +1211,6 @@ DISTRIBUTIONS
       strict 0
       vars 0
       warnings 0
-  Parse-CPAN-Meta-1.4417
-    pathname: D/DA/DAGOLDEN/Parse-CPAN-Meta-1.4417.tar.gz
-    provides:
-      Parse::CPAN::Meta 1.4417
-    requirements:
-      CPAN::Meta::YAML 0.011
-      Carp 0
-      Encode 0
-      Exporter 0
-      ExtUtils::MakeMaker 0
-      File::Spec 0.80
-      JSON::PP 2.27200
-      perl 5.008001
-      strict 0
   Parse-RecDescent-1.967013
     pathname: J/JT/JTBRAUN/Parse-RecDescent-1.967013.tar.gz
     provides:
@@ -1326,7 +1233,6 @@ DISTRIBUTIONS
       Parse::RecDescent::Token 1.967013
       Parse::RecDescent::UncondReject 1.967013
     requirements:
-      ExtUtils::MakeMaker 6.5702
       Test::More 0
       Text::Balanced 1.95
   Path-Class-0.36
@@ -1351,12 +1257,9 @@ DISTRIBUTIONS
       Module::Build 0.3601
       Perl::OSType 0
       Scalar::Util 0
-      Test 0
-      Test::More 0
       overload 0
       parent 0
       strict 0
-      warnings 0
   Regexp-Common-2016020301
     pathname: A/AB/ABIGAIL/Regexp-Common-2016020301.tar.gz
     provides:
@@ -1686,7 +1589,6 @@ DISTRIBUTIONS
     requirements:
       Capture::Tiny 0.24
       Data::Dumper 2.126
-      ExtUtils::MakeMaker 0
       Test::More 0.88
       Text::Diff 0.35
   Test-Exception-0.43
@@ -1705,60 +1607,6 @@ DISTRIBUTIONS
       perl 5.006001
       strict 0
       warnings 0
-  Test-Harness-3.36
-    pathname: L/LE/LEONT/Test-Harness-3.36.tar.gz
-    provides:
-      App::Prove 3.36
-      App::Prove::State 3.36
-      App::Prove::State::Result 3.36
-      App::Prove::State::Result::Test 3.36
-      Harness::Hook undef
-      TAP::Base 3.36
-      TAP::Formatter::Base 3.36
-      TAP::Formatter::Color 3.36
-      TAP::Formatter::Console 3.36
-      TAP::Formatter::Console::ParallelSession 3.36
-      TAP::Formatter::Console::Session 3.36
-      TAP::Formatter::File 3.36
-      TAP::Formatter::File::Session 3.36
-      TAP::Formatter::Session 3.36
-      TAP::Harness 3.36
-      TAP::Harness::Env 3.36
-      TAP::Object 3.36
-      TAP::Parser 3.36
-      TAP::Parser::Aggregator 3.36
-      TAP::Parser::Grammar 3.36
-      TAP::Parser::Iterator 3.36
-      TAP::Parser::Iterator::Array 3.36
-      TAP::Parser::Iterator::Process 3.36
-      TAP::Parser::Iterator::Stream 3.36
-      TAP::Parser::IteratorFactory 3.36
-      TAP::Parser::Multiplexer 3.36
-      TAP::Parser::Result 3.36
-      TAP::Parser::Result::Bailout 3.36
-      TAP::Parser::Result::Comment 3.36
-      TAP::Parser::Result::Plan 3.36
-      TAP::Parser::Result::Pragma 3.36
-      TAP::Parser::Result::Test 3.36
-      TAP::Parser::Result::Unknown 3.36
-      TAP::Parser::Result::Version 3.36
-      TAP::Parser::Result::YAML 3.36
-      TAP::Parser::ResultFactory 3.36
-      TAP::Parser::Scheduler 3.36
-      TAP::Parser::Scheduler::Job 3.36
-      TAP::Parser::Scheduler::Spinner 3.36
-      TAP::Parser::Source 3.36
-      TAP::Parser::SourceHandler 3.36
-      TAP::Parser::SourceHandler::Executable 3.36
-      TAP::Parser::SourceHandler::File 3.36
-      TAP::Parser::SourceHandler::Handle 3.36
-      TAP::Parser::SourceHandler::Perl 3.36
-      TAP::Parser::SourceHandler::RawTAP 3.36
-      TAP::Parser::YAMLish::Reader 3.36
-      TAP::Parser::YAMLish::Writer 3.36
-      Test::Harness 3.36
-    requirements:
-      ExtUtils::MakeMaker 0
   Test-Simple-1.001014
     pathname: E/EX/EXODIST/Test-Simple-1.001014.tar.gz
     provides:

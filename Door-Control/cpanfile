@@ -6,7 +6,7 @@ requires 'aliased';
 requires 'Moo';
 requires 'MooX::Options';
 requires 'namespace::clean';
-requires 'Config::Simple';
+requires 'Config::Tiny';
 requires 'JSON::MaybeXS';
 requires 'JSON::PP';
 requires 'URI';

@@ -4,7 +4,7 @@ use Moo;
 use MooX::Options;
 use aliased 'LAMM::RFID::DoorControl::Schema';
 use aliased 'LAMM::RFID::DoorControl::Fetch';
-use Config::Simple;
+use Config::Tiny;
 use namespace::clean  -except => [qw/_options_data _options_config/];
 
 option config_file => (
@@ -19,9 +19,8 @@ has config => (
   is => 'lazy',
   builder => sub {
     my $self = shift;
-    my $cfg = Config::Simple->new( syntax => 'ini' );
-    $cfg->read( $self->config_file );
-    return $cfg->vars();
+    my $cfg = Config::Tiny->read( $self->config_file );
+    return $cfg;
   },
 );
 
@@ -30,9 +29,9 @@ has fetcher => (
   builder => sub {
     my $self = shift;
     return Fetch->new(
-      endpoint => $self->config->{ 'fetch.endpoint' },
-      door => $self->config->{ 'main.door' },
-      key => $self->config->{ 'fetch.api_key' },
+      endpoint => $self->config->{ 'fetch' }->{ 'endpoint' },
+      door => $self->config->{ 'main' }->{ 'door' },
+      key => $self->config->{ 'fetch' }->{ 'api_key' },
     );
   },
 );
@@ -42,9 +41,9 @@ has schema => (
   builder => sub {
     my $self = shift;
     return Schema->connect(
-      $self->config->{ 'db.dsn' },
-      $self->config->{ 'db.username' },
-      $self->config->{ 'db.password' },
+      $self->config->{ 'db' }->{ 'dsn' },
+      $self->config->{ 'db' }->{ 'username' },
+      $self->config->{ 'db' }->{ 'password' },
     );
   },
 );
