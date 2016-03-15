@@ -1,7 +1,7 @@
 package LAMM::RFID::DoorControl;
 
 use Moo;
-use MooX::Options;
+use MooX::Options protect_argv => 0;
 use aliased 'LAMM::RFID::DoorControl::Schema';
 use aliased 'LAMM::RFID::DoorControl::Fetch';
 use Config::Tiny;
@@ -48,13 +48,13 @@ has schema => (
   },
 );
 
-sub deploy {
+sub cmd_deploy {
   my $self = shift;
 
   $self->schema->deploy;
 }
 
-sub update {
+sub cmd_update {
   my ( $self ) = @_;
 
   my $data = $self->fetcher->get;
@@ -66,6 +66,18 @@ sub update {
       { key => 'primary' },
     );
   }
+}
+
+sub BUILD {
+  my ( $self ) = @_;
+
+  my ( $cmd, @extra ) = @ARGV;
+
+  die "Must supply a command\n" unless $cmd;
+  die "Extra commands found - Please provide only one!\n" if @extra;
+  die "No such command ${cmd} \n" unless $self->can("cmd_${cmd}");
+
+  $self->${\"cmd_${cmd}"};
 }
 
 1;
