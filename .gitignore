@@ -2,3 +2,6 @@ Door-Control/local
 Door-Server/local
 config.cfg
 *.swp
+/env/
+*~
+*.pyc
