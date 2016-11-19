@@ -52,6 +52,7 @@ sub get {
   my $self = shift;
 
   my $return = $self->ua->get( $self->uri );
+  return undef if $return->code != 200;
   return $self->json->decode( $return->decoded_content );
 }
 

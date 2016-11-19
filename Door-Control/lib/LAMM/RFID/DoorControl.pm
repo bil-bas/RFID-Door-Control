@@ -58,14 +58,23 @@ sub cmd_update {
   my ( $self ) = @_;
 
   my $data = $self->fetcher->get;
+  die "No data from endpoint, not updating!" unless defined $data;
   my $allowed_rs = $self->schema->resultset( 'AllowedCard' );
+
+  my @updated;
 
   for my $card ( @{ $data->{ allowed_card } } ) {
     $allowed_rs->update_or_create(
       $card,
       { key => 'primary' },
     );
+    push @updated, $card->{user_id};
   }
+  my $not_found_rs = $allowed_rs->search({
+    user_id => { '-not_in' => \@updated }
+  });
+
+  $not_found_rs->delete;
 }
 
 sub BUILD {
