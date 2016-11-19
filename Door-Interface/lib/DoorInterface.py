@@ -11,6 +11,7 @@ class DoorInterface:
     self.config.read(path)
     self.db.init(self.config)
     self.card_key = get_hex_array(self.config.get('main', 'key'))
+    self.card_block = self.config.getint('main', 'block')
 
     # Configuration for a Raspberry Pi:
     CS   = 18 # SSEL
@@ -32,6 +33,17 @@ class DoorInterface:
 
   def read_card_id(self):
     return self.rfid_reader.read_passive_target()
+
+  def read_block(self, uid):
+    "Dump the data from the specified block"
+    if self.rfid_reader.mifare_classic_authenticate_block(
+                  uid,
+                  self.card_block,
+                  PN532.MIFARE_CMD_AUTH_A,
+                  self.card_key):
+      return self.rfid_reader.mifare_classic_read_block(self.card_block)
+    else:
+      return None
 
 def get_hex_array ( string ):
   return map( ord, string.decode( "hex" ) )
