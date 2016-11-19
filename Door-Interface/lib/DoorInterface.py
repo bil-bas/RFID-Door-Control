@@ -35,7 +35,7 @@ class DoorInterface:
     return self.rfid_reader.read_passive_target()
 
   def read_block(self, uid):
-    "Dump the data from the specified block"
+    "Read the data from the specified block"
     if self.rfid_reader.mifare_classic_authenticate_block(
                   uid,
                   self.card_block,
