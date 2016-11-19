@@ -1,0 +1,8 @@
+requires 'Authen::Passphrase::BlowfishCrypt';
+requires 'Authen::Passphrase::RejectAll';
+requires 'DBIx::Class';
+requires 'DBIx::Class::Candy';
+requires 'DBIx::Class::PassphraseColumn';
+requires 'Mojolicious' => '7.10';
+requires 'Mojolicious::Plugin::Authentication';
+requires 'Term::ReadKey';
