@@ -3,10 +3,13 @@
 import sys
 sys.path.append('lib')
 
-from peewee import SqliteDatabase
+import ConfigParser
 import doordb
 
-doordb.init(SqliteDatabase('/home/pi/keydb.db'))
+config = ConfigParser.ConfigParser()
+config.read('../config.cfg')
+
+doordb.init(config)
 #user_id = doordb.get_user(card_key = 'hex card key here')
 #if user_id:
 #    print "Authenticated user", user_id

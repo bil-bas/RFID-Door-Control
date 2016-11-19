@@ -16,10 +16,21 @@ class AllowedCard(BaseModel):
         db_table='allowed_cards'
 
 """
-Initialize doordb with a peewee database.  E.g., init(peewee.SqliteDatabase('cards.db'))
-:param db: a peewee database descriptor
+Initialize doordb with a peewee database, using data from a config file.
+Example:
+  config = ConfigParser.ConfigParser()
+  init(config.read('config.conf'))
+:param config: a ConfigParser object with a db section
 """
-def init(db):
+def init(config):
+    db = None
+    db_type = config.get('db', 'type')
+
+    if db_type == 'SQLite':
+        db = SqliteDatabase(config.get('db','database'))
+    else:
+        raise Exception("Unknown Database Type")
+
     db_proxy.initialize(db)
     db_proxy.connect()
 
