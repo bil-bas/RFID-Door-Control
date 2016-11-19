@@ -1,6 +1,8 @@
 [main]
 key = FFFFFFFFFFFF
 door = testing
+id_block = 1
+key_block = 3
 
 [fetch]
 endpoint = file://path/to/keyfile
@@ -8,5 +10,9 @@ api_key = myapikeyhere
 
 [db]
 dsn = dbi:SQLite:/path/to/db
+type = SQLite
+database = /path/to/db
+host =
+port =
 username = test
 password = test
