@@ -61,20 +61,20 @@ sub cmd_update {
   die "No data from endpoint, not updating!" unless defined $data;
   my $allowed_rs = $self->schema->resultset( 'AllowedCard' );
 
-  my @updated;
+  my @all_rs = $allowed_rs->search(undef, { select => ['user_id'] })->all;
+  my %to_remove = map { $_->user_id => 1 } @all_rs;
 
   for my $card ( @{ $data->{ allowed_card } } ) {
     $allowed_rs->update_or_create(
       $card,
       { key => 'primary' },
     );
-    push @updated, $card->{user_id};
+    delete $to_remove{ $card->{user_id} };
   }
-  my $not_found_rs = $allowed_rs->search({
-    user_id => { '-not_in' => \@updated }
-  });
-
-  $not_found_rs->delete;
+  for (keys %to_remove) {
+    my $not_found_rs = $allowed_rs->find( $_ );
+    $not_found_rs->delete;
+  }
 }
 
 sub BUILD {
