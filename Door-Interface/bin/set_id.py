@@ -13,6 +13,12 @@ import binascii
 import time
 from DoorInterface import DoorInterface
 
+try:
+  user_id = sys.argv[1]
+except:
+  print "You must supply a user id!"
+  sys.exit(1)
+
 print 'Setting up...'
 
 interface = DoorInterface('../config.cfg')
@@ -24,21 +30,16 @@ def signal_handler(signal, frame):
 
 signal.signal(signal.SIGINT, signal_handler)
 
-while 1:
-  uid = None
+print 'Present Card to change Key on...'
+
+uid = None
+while uid is None:
   uid = interface.read_card_id()
 
   if uid is not None:
     print 'Found card with UID: 0x{0}'.format(binascii.hexlify(uid))
-    data = interface.read_key_block(uid)
-    if data is not None:
-      print 'Read block {1}: 0x{0}'.format(binascii.hexlify(data),interface.key_block)
+    if interface.set_id(uid, user_id):
+      print 'Changed key in card'
     else:
-      print "Failed to read key block"
-    data = interface.read_id_block(uid)
-    if data is not None:
-      print 'Read block {1}: 0x{0}'.format(binascii.hexlify(data),interface.id_block)
-    else:
-      print "Failed to read id block"
-    time.sleep(2)
+      print "Failed to change key"
 

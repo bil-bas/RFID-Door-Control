@@ -52,3 +52,6 @@ def get_user(card_key):
         return card.user_id
     else:
         return None
+
+def get_user_entry(user_id):
+    return AllowedCard.get(AllowedCard.user_id == user_id)

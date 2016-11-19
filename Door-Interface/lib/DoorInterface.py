@@ -79,5 +79,15 @@ class DoorInterface:
 
     return self.write_block(uid, self.key_block, new_key_data, self.__key_default)
 
+  def set_id(self, uid, user_id):
+    "Sets the users id onto the card"
+    user_result = self.db.get_user_entry(user_id)
+    if user_result:
+      return self.write_block( uid, self.id_block,
+        get_hex_array(user_result.card_key))
+    else:
+      print "User ID Does not exist"
+      return None
+
 def get_hex_array ( string ):
   return map( ord, string.decode( "hex" ) )
