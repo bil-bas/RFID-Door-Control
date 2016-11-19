@@ -30,5 +30,8 @@ class DoorInterface:
     ic, ver, rev, support = self.rfid_reader.get_firmware_version()
     print 'Found PN532 with firmware version: {0}.{1}'.format(ver, rev)
 
+  def read_card_id(self):
+    return self.rfid_reader.read_passive_target()
+
 def get_hex_array ( string ):
   return map( ord, string.decode( "hex" ) )
