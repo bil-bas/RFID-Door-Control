@@ -24,6 +24,8 @@ def signal_handler(signal, frame):
 
 signal.signal(signal.SIGINT, signal_handler)
 
+print 'Present Card to change Key on...'
+
 uid = None
 while uid is None:
   uid = interface.read_card_id()
