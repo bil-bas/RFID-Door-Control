@@ -1,4 +1,5 @@
 import ConfigParser
+import binascii
 import doordb
 import Adafruit_PN532 as PN532
 
@@ -87,6 +88,27 @@ class DoorInterface:
         get_hex_array(user_result.card_key))
     else:
       print "User ID Does not exist"
+      return None
+
+  def check_card(self):
+    "Main Runtime for Checking Door Card"
+    uid = self.read_card_id()
+
+    if uid is None:
+      return None
+
+    print 'Found card with UID: 0x{0}'.format(binascii.hexlify(uid))
+    data = self.read_id_block(uid)
+    if data is None:
+      print 'Failed to Auth Card'
+      return None
+
+    user_id = self.db.get_user(binascii.hexlify(data))
+    if user_id is not None:
+      print 'Found User: {0}'.format(user_id)
+      return True
+    else:
+      print 'Failed to find User'
       return None
 
 def get_hex_array ( string ):
