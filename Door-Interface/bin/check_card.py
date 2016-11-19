@@ -9,7 +9,6 @@ import sys
 sys.path.append('lib')
 
 import signal
-import binascii
 import time
 from DoorInterface import DoorInterface
 
@@ -31,3 +30,4 @@ while 1:
     print "Opening Door"
     time.sleep(5)
 
+  time.sleep(1)
