@@ -1,3 +1,0 @@
-requires 'Web::Simple';
-requires 'JSON::MaybeXS';
-requires 'Plack';
