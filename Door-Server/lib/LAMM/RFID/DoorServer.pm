@@ -49,7 +49,8 @@ sub startup {
   $r->any('/logout')->to('root#auth_logout');
 
   my $admin = $r->under('/admin')->to('root#auth');
-  #$admin->
+  $admin->get('/')->to('admin#index');
+  $admin->any('/door/:action')->to('admin-door#');
 
   my $api = $r->under('/api')->to('api#auth');
 

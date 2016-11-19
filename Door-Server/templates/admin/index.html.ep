@@ -1,0 +1,1 @@
+<a href="<%= url_for('/admin/door/list') %>">Door Listings</a>

@@ -1,0 +1,12 @@
+<a href="<%= url_for('/admin') %>">Admin</a>
+
+<% if ( my $message = flash 'message' ) { %><p><%= $message %></p><% } %>
+
+<form method="post" action="<%= url_for('/admin/door/add') %>">
+  <input type="text" name="name" placeholder="Door Name">
+  <input type="submit">
+</form>
+
+<% while ( my $door_result = $door_rs->next ) { %>
+<p><%= $door_result->name %> : <%= $door_result->key %> : <a href="<%= url_for('/admin/door/del')->query({ door => $door_result->id }) %>">Delete</a></p>
+<% } %>
