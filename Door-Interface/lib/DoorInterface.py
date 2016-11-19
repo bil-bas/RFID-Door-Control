@@ -11,7 +11,12 @@ class DoorInterface:
     self.config.read(path)
     self.db.init(self.config)
     self.card_key = get_hex_array(self.config.get('main', 'key'))
-    self.card_block = self.config.getint('main', 'block')
+    self.key_block = self.config.getint('main', 'key_block')
+    self.id_block = self.config.getint('main', 'id_block')
+
+
+    self.__key_default = [0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF]
+    self.__access_key  = get_hex_array( 'FF078069' )
 
     # Configuration for a Raspberry Pi:
     CS   = 18 # SSEL
@@ -34,16 +39,45 @@ class DoorInterface:
   def read_card_id(self):
     return self.rfid_reader.read_passive_target()
 
-  def read_block(self, uid):
+  def read_block(self, uid, block, key=None):
     "Read the data from the specified block"
+    if key is None:
+      key = self.card_key
     if self.rfid_reader.mifare_classic_authenticate_block(
                   uid,
-                  self.card_block,
+                  block,
                   PN532.MIFARE_CMD_AUTH_A,
                   self.card_key):
-      return self.rfid_reader.mifare_classic_read_block(self.card_block)
+      return self.rfid_reader.mifare_classic_read_block(block)
     else:
       return None
+
+  def read_key_block(self, uid):
+    return self.read_block(uid, self.key_block)
+
+  def read_id_block(self, uid):
+    return self.read_block(uid, self.id_block)
+
+  def write_block(self, uid, block, data, key=None):
+    if key is None:
+      key = self.card_key
+    if self.rfid_reader.mifare_classic_authenticate_block(
+                  uid,
+                  block,
+                  PN532.MIFARE_CMD_AUTH_A,
+                  key):
+      return self.rfid_reader.mifare_classic_write_block(block, data)
+    else:
+      return None
+
+  def set_key(self, uid):
+    "Sets the defined card key on an unused card"
+    new_key_data = bytearray( 16 )
+    new_key_data[0:6] = self.card_key
+    new_key_data[6:10] = self.__access_key
+    new_key_data[10:16] = self.__key_default
+
+    return self.write_block(uid, self.key_block, new_key_data, self.__key_default)
 
 def get_hex_array ( string ):
   return map( ord, string.decode( "hex" ) )

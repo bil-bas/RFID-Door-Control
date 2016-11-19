@@ -24,16 +24,14 @@ def signal_handler(signal, frame):
 
 signal.signal(signal.SIGINT, signal_handler)
 
-while 1:
-  uid = None
+uid = None
+while uid is None:
   uid = interface.read_card_id()
 
   if uid is not None:
     print 'Found card with UID: 0x{0}'.format(binascii.hexlify(uid))
-    data = interface.read_key_block(uid)
-    if data is not None:
-      print 'Read block {1}: 0x{0}'.format(binascii.hexlify(data),interface.key_block)
+    if interface.set_key(uid):
+      print 'Changed key in card'
     else:
-      print "Failed to read block"
-    time.sleep(2)
+      print "Failed to change key"
 
