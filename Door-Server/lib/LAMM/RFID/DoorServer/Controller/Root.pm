@@ -5,7 +5,7 @@ sub auth {
   my $c = shift;
   return 1 if $c->is_user_authenticated;
 
-  $c->redirect_to($c->url_for('/login'));
+  $c->redirect_to($c->url_for('/'));
 
   return 0;
 }
