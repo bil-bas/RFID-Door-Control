@@ -1,0 +1,15 @@
+<a href="<%= url_for('/admin/assign/list') %>">Assign Cards to Doors</a>
+
+<h2><%= $card_result->name %></h2>
+
+<h3>Doors</h3>
+
+<% while ( my $door_result = $door_rs->next ) { %>
+<p><%= $door_result->name %> : <a href="<%= url_for('/admin/assign/assign_door')->query({ card => $card_result->id, door => $door_result->id }) %>">
+% if ( defined $card_result->doors->find($door_result->id) ) {
+  Disable
+% } else {
+  Enable
+% }
+</a></p>
+<% } %>

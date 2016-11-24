@@ -1,0 +1,12 @@
+<a href="<%= url_for('/admin') %>">Admin</a>
+
+<% if ( my $message = flash 'message' ) { %><p><%= $message %></p><% } %>
+
+<form method="post" action="<%= url_for('/admin/card/add') %>">
+  <input type="text" name="name" placeholder="Card Name">
+  <input type="submit">
+</form>
+
+<% while ( my $card_result = $card_rs->next ) { %>
+<p><%= $card_result->name %> : <%= $card_result->card_key %> : <a href="<%= url_for('/admin/card/del')->query({ card => $card_result->id }) %>">Delete</a></p>
+<% } %>

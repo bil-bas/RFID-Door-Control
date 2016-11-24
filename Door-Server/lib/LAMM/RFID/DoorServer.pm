@@ -50,7 +50,9 @@ sub startup {
 
   my $admin = $r->under('/admin')->to('root#auth');
   $admin->get('/')->to('admin#index');
-  $admin->any('/door/:action')->to('admin-door#');
+  for my $endpoint ( qw/ card door assign / ) {
+    $admin->any("/$endpoint/:action")->to("admin-$endpoint#");
+  }
 
   my $api = $r->under('/api')->to('api#auth');
 

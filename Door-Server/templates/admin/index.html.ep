@@ -1,1 +1,3 @@
 <a href="<%= url_for('/admin/door/list') %>">Door Listings</a>
+<a href="<%= url_for('/admin/card/list') %>">Card Listings</a>
+<a href="<%= url_for('/admin/assign/list') %>">Assign Cards to Doors</a>

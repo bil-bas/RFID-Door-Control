@@ -18,7 +18,12 @@ sub add {
 
   if (defined $name && length $name) {
     $c->app->log->debug("Creating door with name [$name]");
-    $c->db->resultset('Door')->create_door($name);
+    my $door_result = $c->db->resultset('Door')->create_door($name);
+    if (defined $door_result) {
+      $c->flash(message => 'Door Created Successfully');
+    } else {
+      $c->flash(message => 'Door Creation Failed');
+    }
   }
   $c->redirect_to($c->url_for('list'));
 }

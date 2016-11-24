@@ -1,0 +1,15 @@
+<a href="<%= url_for('/admin') %>">Admin</a>
+
+<% if ( my $message = flash 'message' ) { %><p><%= $message %></p><% } %>
+
+<h2>Doors</h2>
+
+<% while ( my $door_result = $door_rs->next ) { %>
+<p><%= $door_result->name %> : <a href="<%= url_for('/admin/assign/door')->query({ door => $door_result->id }) %>">Edit</a></p>
+<% } %>
+
+<h2>Cards</h2>
+
+<% while ( my $card_result = $card_rs->next ) { %>
+<p><%= $card_result->name %> : <a href="<%= url_for('/admin/assign/card')->query({ card => $card_result->id }) %>">Edit</a></p>
+<% } %>
