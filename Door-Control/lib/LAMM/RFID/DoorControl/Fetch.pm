@@ -42,8 +42,8 @@ has uri => (
   is => 'lazy',
   builder => sub {
     my $self = shift;
-    my $uri = URI->new_abs( $self->door, $self->endpoint );
-    $uri->query_form( key => $self->key );
+    my $uri = URI->new( $self->endpoint );
+    $uri->query_form( door => $self->door, key => $self->key );
     return $uri;
   },
 );
