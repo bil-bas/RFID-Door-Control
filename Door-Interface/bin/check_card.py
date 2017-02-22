@@ -11,11 +11,17 @@ sys.path.append('lib')
 import signal
 import time
 from DoorInterface import DoorInterface
+import RPi.GPIO as GPIO
 
 print 'Setting up...'
 
 interface = DoorInterface('../config.cfg')
 interface.print_reader_version()
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(11, GPIO.OUT)
+
+GPIO.output(11, GPIO.LOW)
 
 def signal_handler(signal, frame):
   print "\nStopping Scanning"
@@ -28,6 +34,8 @@ while 1:
 
   if flag is True:
     print "Opening Door"
-    time.sleep(5)
+    GPIO.output(11, GPIO.HIGH)
+    time.sleep(2)
+    GPIO.output(11, GPIO.LOW)
 
   time.sleep(1)
