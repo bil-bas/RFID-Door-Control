@@ -28,6 +28,7 @@ class DoorInterface:
     # Create an instance of the PN532 class.
     self.rfid_reader = PN532.PN532(cs=CS, sclk=SCLK, mosi=MOSI, miso=MISO)
     self.rfid_reader.begin()
+    self.rfid_reader.SAM_configuration()
 
   def dump_cards(self):
     for allowed_card in self.db.AllowedCard.select():
