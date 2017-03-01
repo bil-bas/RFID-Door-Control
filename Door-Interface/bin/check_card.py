@@ -20,8 +20,10 @@ interface.print_reader_version()
 
 GPIO.setmode(GPIO.BCM)
 GPIO.setup(11, GPIO.OUT)
+GPIO.setup(9, GPIO.OUT)
 
 GPIO.output(11, GPIO.LOW)
+GPIO.output(9, GPIO.LOW)
 
 def signal_handler(signal, frame):
   print "\nStopping Scanning"
@@ -37,5 +39,10 @@ while 1:
     GPIO.output(11, GPIO.HIGH)
     time.sleep(2)
     GPIO.output(11, GPIO.LOW)
+  elif flag is False:
+    print "Failed Auth"
+    GPIO.output(9, GPIO.HIGH)
+    time.sleep(2)
+    GPIO.output(9, GPIO.LOW)
 
   time.sleep(1)

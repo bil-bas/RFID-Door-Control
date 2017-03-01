@@ -102,7 +102,7 @@ class DoorInterface:
     data = self.read_id_block(uid)
     if data is None:
       print 'Failed to Auth Card'
-      return None
+      return False
 
     user_id = self.db.get_user(binascii.hexlify(data))
     if user_id is not None:
@@ -110,7 +110,7 @@ class DoorInterface:
       return True
     else:
       print 'Failed to find User'
-      return None
+      return False
 
 def get_hex_array ( string ):
   return map( ord, string.decode( "hex" ) )
