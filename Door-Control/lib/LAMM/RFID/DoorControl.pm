@@ -66,6 +66,9 @@ sub cmd_update {
 
   for my $card ( @{ $data->{ allowed_card } } ) {
     $allowed_rs->update_or_create(
+      {
+        user_id => $card->{user_id},
+        card_key => $card->{card_key},
       $card,
       { key => 'primary' },
     );

@@ -35,8 +35,8 @@ sub fetch {
   my $door_result = $c->stash('door_result');
 
   my $cards_rs = $door_result->cards->search({},{
-    select => [ qw/ id card_key / ],
-    'as' => [ qw/ user_id card_key / ],
+    select => [ qw/ id name card_key / ],
+    'as' => [ qw/ user_id user_name card_key / ],
   });
 
   $cards_rs->result_class('DBIx::Class::ResultClass::HashRefInflator');
