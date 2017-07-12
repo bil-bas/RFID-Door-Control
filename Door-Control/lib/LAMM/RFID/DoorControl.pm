@@ -69,7 +69,7 @@ sub cmd_update {
       {
         user_id => $card->{user_id},
         card_key => $card->{card_key},
-      $card,
+      },
       { key => 'primary' },
     );
     delete $to_remove{ $card->{user_id} };
