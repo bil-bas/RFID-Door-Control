@@ -11,7 +11,7 @@ sys.path.append('lib')
 import signal
 import binascii
 import time
-from DoorInterface import DoorInterface
+from DoorInterfaceNoDb import DoorInterface
 
 print 'Setting up...'
 
