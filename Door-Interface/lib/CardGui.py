@@ -63,11 +63,14 @@ class CardGui:
         interface = DoorInterface(self.config_path)
         interface.print_reader_version()
 
+        timeout_box = self.msg_box("Notice", "Place Card on reader", False)
+
         uid = None
         while uid is None:
             uid = interface.read_card_id()
 
             if uid is not None:
+                timeout_box.destroy
                 print 'Found card with UID: 0x{0}'.format(binascii.hexlify(uid))
                 if interface.read_id_block(uid):
                     print "Writing card with new key"
@@ -83,11 +86,14 @@ class CardGui:
         interface = DoorInterface(self.config_path)
         interface.print_reader_version()
 
+        timeout_box = self.msg_box("Notice", "Place Card on reader", False)
+
         uid = None
         while uid is None:
             uid = interface.read_card_id()
 
             if uid is not None:
+                timeout_box.destroy
                 print 'Found card with UID: 0x{0}'.format(binascii.hexlify(uid))
                 if interface.set_key(uid):
                     self.msg_box("Success", "Set new key")
@@ -112,8 +118,10 @@ class CardGui:
         self.list_view = Listbox(self.tk)
         self.list_view.pack()
 
-    def msg_box(self, title, msg):
+    def msg_box(self, title, msg, show_button=True):
         box = Toplevel()
         box.title(title)
         Label(box, text=msg).pack()
-        Button(box, text="Dismiss", command=box.destroy).pack()
+        if show_button:
+            Button(box, text="Dismiss", command=box.destroy).pack()
+        return box
