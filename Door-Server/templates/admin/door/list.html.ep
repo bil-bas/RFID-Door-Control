@@ -1,12 +1,35 @@
-<a href="<%= url_for('/admin') %>">Admin</a>
+% layout 'default';
+% title 'Doors';
+%= include '_partial/menu';
+<% if ( my $message = flash 'message' ) { %>
+<div class="m-3 alert alert-primary" role="alert">
+  <%= $message %>
+</div>
+<% } %>
 
-<% if ( my $message = flash 'message' ) { %><p><%= $message %></p><% } %>
-
-<form method="post" action="<%= url_for('/admin/door/add') %>">
-  <input type="text" name="name" placeholder="Door Name">
-  <input type="submit">
+<form class="my-3 form-inline" method="post" action="<%= url_for('/admin/door/add') %>">
+  <div class="form-group">
+    <label for="name">Add Door</label>
+    <input id="name" class="form-control mx-3" type="text" name="name" placeholder="Name">
+  </div>
+  <button class="btn btn-primary" type="submit">Add</button>
 </form>
 
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th>Name</th>
+    <th></th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
 <% while ( my $door_result = $door_rs->next ) { %>
-<p><%= $door_result->name %> : <%= $door_result->key %> : <a href="<%= url_for('/admin/door/del')->query({ door => $door_result->id }) %>">Delete</a></p>
+  <tr>
+    <td><%= $door_result->name %></td>
+    <td><a class="btn btn-primary" href="<%= url_for('/admin/assign/door')->query({ door => $door_result->id }) %>">Assign</a></td>
+    <td><a class="btn btn-danger" href="<%= url_for('/admin/door/del')->query({ door => $door_result->id }) %>">Delete</a></td>
+  </tr>
 <% } %>
+  </tbody>
+</table>

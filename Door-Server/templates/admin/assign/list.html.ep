@@ -1,15 +1,46 @@
-<a href="<%= url_for('/admin') %>">Admin</a>
-
-<% if ( my $message = flash 'message' ) { %><p><%= $message %></p><% } %>
+% layout 'default';
+% title 'Assign';
+%= include '_partial/menu';
+<% if ( my $message = flash 'message' ) { %>
+<div class="m-3 alert alert-primary" role="alert">
+  <%= $message %>
+</div>
+<% } %>
 
 <h2>Doors</h2>
 
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th>Name</th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
 <% while ( my $door_result = $door_rs->next ) { %>
-<p><%= $door_result->name %> : <a href="<%= url_for('/admin/assign/door')->query({ door => $door_result->id }) %>">Edit</a></p>
+  <tr>
+    <td><%= $door_result->name %></td>
+    <td><a class="btn btn-primary" href="<%= url_for('/admin/assign/door')->query({ door => $door_result->id }) %>">Assign</a></td>
+  </tr>
 <% } %>
+  </tbody>
+</table>
 
 <h2>Cards</h2>
 
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th>Name</th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
 <% while ( my $card_result = $card_rs->next ) { %>
-<p><%= $card_result->name %> : <a href="<%= url_for('/admin/assign/card')->query({ card => $card_result->id }) %>">Edit</a></p>
+  <tr>
+    <td><%= $card_result->name %></td>
+    <td><a class="btn btn-primary" href="<%= url_for('/admin/assign/card')->query({ card => $card_result->id }) %>">Assign</a></td>
+  </tr>
 <% } %>
+  </tbody>
+</table>

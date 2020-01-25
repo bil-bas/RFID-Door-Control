@@ -1,3 +1,15 @@
-<a href="<%= url_for('/admin/door/list') %>">Door Listings</a>
-<a href="<%= url_for('/admin/card/list') %>">Card Listings</a>
-<a href="<%= url_for('/admin/assign/list') %>">Assign Cards to Doors</a>
+% layout 'default';
+% title 'Dashboard';
+%= include '_partial/menu';
+<div class="m-3 card-deck">
+  <div class="card">
+    <div class="card-body">
+      Doors: <%= db->resultset('Door')->count %>
+    </div>
+  </div>
+  <div class="card">
+    <div class="card-body">
+      Cards: <%= db->resultset('Card')->count %>
+    </div>
+  </div>
+</div>

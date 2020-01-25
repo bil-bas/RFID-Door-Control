@@ -1,15 +1,31 @@
-<a href="<%= url_for('/admin/assign/list') %>">Assign Cards to Doors</a>
+% layout 'default';
+% title 'Card Assign';
+%= include '_partial/menu';
 
-<h2><%= $card_result->name %></h2>
+<h2>Card: <%= $card_result->name %></h2>
 
-<h3>Doors</h3>
+<h3>Enable/Disable Doors</h3>
 
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th>Name</th>
+    <th>State</th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
 <% while ( my $door_result = $door_rs->next ) { %>
-<p><%= $door_result->name %> : <a href="<%= url_for('/admin/assign/assign_door')->query({ card => $card_result->id, door => $door_result->id }) %>">
+  <tr>
+    <td><%= $door_result->name %></td>
 % if ( defined $card_result->doors->find($door_result->id) ) {
-  Disable
+    <td>Enabled</td>
+    <td><a class="btn btn-danger" href="<%= url_for('/admin/assign/assign_door')->query({ card => $card_result->id, door => $door_result->id }) %>"">Disable</a></td>
 % } else {
-  Enable
+    <td>Disabled</td>
+    <td><a class="btn btn-primary" href="<%= url_for('/admin/assign/assign_door')->query({ card => $card_result->id, door => $door_result->id }) %>"">Enable</a></td>
 % }
-</a></p>
+  </tr>
 <% } %>
+  </tbody>
+</table>

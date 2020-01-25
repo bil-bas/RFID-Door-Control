@@ -25,10 +25,12 @@ sub run {
   my $remove = 0;
   my $user = '';
   my $email = '';
+  my $password = '';
 
   GetOptionsFromArray \@args,
     'add'    => \$add,
     'rem'    => \$remove,
+    'pass=s' => \$password,
     'user=s' => \$user;
 
   if ( ! defined $user ) {
@@ -47,12 +49,14 @@ sub run {
       return;
     }
 
-    print "Input Password: ";
-    ReadMode('noecho');
-    my $password = ReadLine(0);
-    chomp $password;
-    ReadMode('normal');
-    print "\n";
+    if ( ! defined $password ) {
+      print "Input Password: ";
+      ReadMode('noecho');
+      $password = ReadLine(0);
+      chomp $password;
+      ReadMode('normal');
+      print "\n";
+    }
 
     $user_rs->create({
       username => $user,

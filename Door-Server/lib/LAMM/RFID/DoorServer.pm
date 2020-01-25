@@ -16,8 +16,6 @@ sub startup {
 
   push @{$self->app->commands->namespaces}, 'LAMM::RFID::DoorServer::Command';
 
-  # Documentation browser under "/perldoc"
-  $self->plugin('PODRenderer');
   $self->plugin('Config');
 
   $self->plugin('Authentication', {
@@ -30,10 +28,12 @@ sub startup {
       my ( $c, $username, $password, $extra ) = @_;
       my $user_result = $c->db->resultset('User')->find({
           username => $username});
-      return unless defined $user_result;
+      $c->log->warn("User not found for username [$username]") and return unless defined $user_result;
       if ($user_result->check_password($password)) {
+        $c->log->debug("Successful Authentication for user [$username]");
         return $user_result->id;
       }
+      $c->log->warn("Failed Authentication for user [$username]");
       return;
     },
   });
@@ -50,7 +50,7 @@ sub startup {
 
   my $admin = $r->under('/admin')->to('root#auth');
   $admin->get('/')->to('admin#index');
-  for my $endpoint ( qw/ card door assign / ) {
+  for my $endpoint ( qw/ card door assign user / ) {
     $admin->any("/$endpoint/:action")->to("admin-$endpoint#");
   }
 

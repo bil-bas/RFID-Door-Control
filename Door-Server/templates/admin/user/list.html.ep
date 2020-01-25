@@ -1,0 +1,38 @@
+% layout 'default';
+% title 'Users';
+%= include '_partial/menu';
+<% if ( my $message = flash 'message' ) { %>
+<div class="m-3 alert alert-primary" role="alert">
+  <%= $message %>
+</div>
+<% } %>
+
+<form class="my-3 form-inline" method="post" action="<%= url_for('/admin/user/add') %>">
+  <div class="form-group">
+    <label for="name">Add User</label>
+    <input id="name" class="form-control mx-3" type="text" name="username" placeholder="Name">
+  </div>
+  <div class="form-group">
+    <input id="password" class="form-control mr-3" type="password" name="password" placeholder="Password">
+  </div>
+  <button class="btn btn-primary" type="submit">Add</button>
+</form>
+
+<table class="table table-striped">
+  <thead>
+  <tr>
+    <th>Name</th>
+    <th></th>
+    <th></th>
+  </tr>
+  </thead>
+  <tbody>
+<% while ( my $user_result = $user_rs->next ) { %>
+  <tr>
+    <td><%= $user_result->username %></td>
+    <td><a class="btn btn-primary" href="<%= url_for('/admin/user/edit')->query({ uid => $user_result->id }) %>">Edit</a></td>
+    <td><a class="btn btn-danger" href="<%= url_for('/admin/user/del')->query({ uid => $user_result->id }) %>">Delete</a></td>
+  </tr>
+<% } %>
+  </tbody>
+</table>
