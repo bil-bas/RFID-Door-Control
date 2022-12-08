@@ -70,7 +70,7 @@ class CardGui:
             uid = interface.read_card_id()
 
             if uid is not None:
-                timeout_box.destroy
+                timeout_box.destroy()
                 print 'Found card with UID: 0x{0}'.format(binascii.hexlify(uid))
                 if interface.read_id_block(uid):
                     print "Writing card with new key"
@@ -93,7 +93,7 @@ class CardGui:
             uid = interface.read_card_id()
 
             if uid is not None:
-                timeout_box.destroy
+                timeout_box.destroy()
                 print 'Found card with UID: 0x{0}'.format(binascii.hexlify(uid))
                 if interface.set_key(uid):
                     self.msg_box("Success", "Set new key")
