@@ -126,7 +126,7 @@ class CardGui:
     def close_msg_box(self):
         if self.dialog is not None:
             try:
-                self.dialog.close()
-            except:
-                pass
+                self.dialog.destroy()
+            except Exception as ex
+                print ex
             self.dialog = None
