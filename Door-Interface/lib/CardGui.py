@@ -123,7 +123,7 @@ class CardGui:
         if show_button:
             Button(self.dialog, text="Dismiss", command=self.close_msg_box).pack()
             
-    def close_msg_box():
+    def close_msg_box(self):
         if self.dialog is not None:
             try:
                 self.dialog.close()
