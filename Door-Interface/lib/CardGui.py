@@ -8,7 +8,6 @@ import binascii
 class CardGui:
 
     def __init__(self, path):
-
         self.config = ConfigParser.ConfigParser()
         self.config_path = path
         self.config.read(path)
@@ -17,6 +16,7 @@ class CardGui:
         self.door = self.config.get('main', 'door')
         self.key = self.config.get('fetch', 'api_key')
         self.cards = []
+        self.dialog = None
 
     def run(self):
         self.init()
@@ -63,14 +63,13 @@ class CardGui:
         interface = DoorInterface(self.config_path)
         interface.print_reader_version()
 
-        timeout_box = self.msg_box("Notice", "Place Card on reader", False)
+        self.msg_box("Notice", "Place Card on reader", False)
 
         uid = None
         while uid is None:
             uid = interface.read_card_id()
 
             if uid is not None:
-                timeout_box.destroy
                 print 'Found card with UID: 0x{0}'.format(binascii.hexlify(uid))
                 if interface.read_id_block(uid):
                     print "Writing card with new key"
@@ -82,18 +81,16 @@ class CardGui:
                     self.msg_box("Warning", "Possible new card, flash new first")
 
     def callback_flash(self):
-
         interface = DoorInterface(self.config_path)
         interface.print_reader_version()
 
-        timeout_box = self.msg_box("Notice", "Place Card on reader", False)
+        self.msg_box("Notice", "Place Card on reader", False)
 
         uid = None
         while uid is None:
             uid = interface.read_card_id()
 
             if uid is not None:
-                timeout_box.destroy
                 print 'Found card with UID: 0x{0}'.format(binascii.hexlify(uid))
                 if interface.set_key(uid):
                     self.msg_box("Success", "Set new key")
@@ -109,7 +106,6 @@ class CardGui:
         button.pack()
 
     def load_cards(self):
-
         self.list_view.delete(0, END)
         for item in self.cards:
             self.list_view.insert(END, item['user_name'])
@@ -119,9 +115,18 @@ class CardGui:
         self.list_view.pack()
 
     def msg_box(self, title, msg, show_button=True):
-        box = Toplevel()
-        box.title(title)
-        Label(box, text=msg).pack()
+        self.close_msg_box()
+        
+        self.dialog = Toplevel()
+        self.dialog.title(title)
+        Label(self.dialog, text=msg).pack()
         if show_button:
-            Button(box, text="Dismiss", command=box.destroy).pack()
-        return box
+            Button(self.dialog, text="Dismiss", command=self.close_msg_box).pack()
+            
+    def close_msg_box():
+        if self.dialog is not None:
+            try:
+                self.dialog.close()
+            except:
+                pass
+            self.dialog = None
