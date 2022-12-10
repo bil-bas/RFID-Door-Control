@@ -31,7 +31,7 @@ class CardGui:
         self.button_write()
 
     def label_title(self):
-        title = Label(self.tk, text="Select a Card to Write")
+        title = Label(self.tk, text="Select a Card/Fob to Write")
         title.pack()
 
     def fetch_data(self):
@@ -71,7 +71,7 @@ class CardGui:
         if interface.set_key(uid):
             print "Set new card key"
         else:
-            print 'Card key already set"
+            print "Card key already set"
             
         if interface.read_id_block(uid):
             print "Writing card with new user id"
