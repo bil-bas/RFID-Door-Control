@@ -12,15 +12,16 @@ class CardGui:
         self.config_path = path
         self.config.read(path)
         self.tk = Tk()
+        self.tk.geometry("250x600")
         self.url = self.config.get('fetch', 'endpoint')
         self.door = self.config.get('main', 'door')
         self.key = self.config.get('fetch', 'api_key')
         self.cards = []
         self.dialog = None
-
+     
     def run(self):
         self.init()
-        self.fetch_data()
+        self.tk.after(100, self.fetch_data)
         self.tk.mainloop()
 
     def init(self):
@@ -28,7 +29,6 @@ class CardGui:
         self.button_refresh()
         self.listbox_cards()
         self.button_write()
-        self.button_flash()
 
     def label_title(self):
         title = Label(self.tk, text="Select a Card to Write")
@@ -38,11 +38,10 @@ class CardGui:
         r = requests.get(self.url, params = {'door': self.door, 'key': self.key}, verify=False)
         data = r.json()
         self.cards = data['allowed_card']
-        self.load_cards()
+        self.list_vwr.set(tuple(c["user_name"] for c in self.cards))
 
     def callback_refresh(self):
         print "Refreshing!"
-
         self.fetch_data()
 
     def button_refresh(self):
@@ -53,71 +52,51 @@ class CardGui:
         print "Writing"
 
         card_index = self.list_view.index(ACTIVE)
-        if card_index is None:
-            self.msg_box("Warning", "Select an ID first")
+        self.card = self.cards[card_index]
+        print "Writing Card for {}, User: {}, Card: {}".format(card['user_name'], self.card["user_id"], self.card["card_key"])
+        self.msg_box("Notice", "Place Card/Fob on reader", False)
+        self.tk.after(100, self.background_write)
+    
+    def background_write(self):
+        interface = DoorInterface(self.config_path)
+        interface.print_reader_version()
+        
+        uid = interface.read_card_id()
+        if uud is None:
+            self.tk.after(100, self.background_write)
             return
 
-        card = self.cards[card_index]
-        print "Writing Card for", card['user_name']
-
-        interface = DoorInterface(self.config_path)
-        interface.print_reader_version()
-
-        self.msg_box("Notice", "Place Card on reader", False)
-
-        uid = None
-        while uid is None:
-            uid = interface.read_card_id()
-
-            if uid is not None:
-                print 'Found card with UID: 0x{0}'.format(binascii.hexlify(uid))
-                if interface.read_id_block(uid):
-                    print "Writing card with new key"
-                    if interface.set_id(uid, card['card_key']):
-                        self.msg_box("Success", "Wrote id correctly")
-                    else:
-                        self.msg_box("Warning", "Failed to write card?!?!")
-                else:
-                    self.msg_box("Warning", "Possible new card, flash new first")
-
-    def callback_flash(self):
-        interface = DoorInterface(self.config_path)
-        interface.print_reader_version()
-
-        self.msg_box("Notice", "Place Card on reader", False)
-
-        uid = None
-        while uid is None:
-            uid = interface.read_card_id()
-
-            if uid is not None:
-                print 'Found card with UID: 0x{0}'.format(binascii.hexlify(uid))
-                if interface.set_key(uid):
-                    self.msg_box("Success", "Set new key")
-                else:
-                    self.msg_box("Warning", "failed to set key, non-blank card?")
+        print 'Found card with UID: 0x{0}'.format(binascii.hexlify(uid))
+        
+        if interface.set_key(uid):
+            print "Set new card key"
+        else:
+            print 'Card key already set"
+            
+        if interface.read_id_block(uid):
+            print "Writing card with new user id"
+            if interface.set_id(uid, card['card_key']):
+                self.msg_box("Success", "Wrote id correctly")
+            else:
+                self.msg_box("Warning", "Failed to write card?!?!")
+        else:
+            self.msg_box("Warning", "Possible new card, flash new first")        
 
     def button_write(self):
-        button = Button(self.tk, text="Write", command=self.callback_write)
+        button = Button(self.tk, text="Write", command=self.callback_write, state=DISABLED)
         button.pack()
-
-    def button_flash(self):
-        button = Button(self.tk, text="Flash Key", command=self.callback_flash)
-        button.pack()
-
-    def load_cards(self):
-        self.list_view.delete(0, END)
-        for item in self.cards:
-            self.list_view.insert(END, item['user_name'])
-
+    
     def listbox_cards(self):
-        self.list_view = Listbox(self.tk)
-        self.list_view.pack()
+        self.list_var = StringVar()
+        self.list_view = Listbox(self.tk, listvariable=self.list_var)
+        self.list_view.pack(expand=True, fill="both", padx=(16, 16), pady=(16, 16))
+        self.list_view.bind("<<ListboxSelect>>", lambda: self.button_write["state"] = NORMAL)
 
     def msg_box(self, title, msg, show_button=True):
         self.close_msg_box()
-        
-        self.dialog = Toplevel()
+       
+        self.dialog = Toplevel(self.tk)
+        self.dialog.grab_set()
         self.dialog.title(title)
         Label(self.dialog, text=msg).pack()
         if show_button:
