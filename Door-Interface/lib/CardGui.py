@@ -38,7 +38,7 @@ class CardGui:
         r = requests.get(self.url, params = {'door': self.door, 'key': self.key}, verify=False)
         data = r.json()
         self.cards = data['allowed_card']
-        self.list_vwr.set(tuple(c["user_name"] for c in self.cards))
+        self.list_var.set(tuple(c["user_name"] for c in self.cards))
 
     def callback_refresh(self):
         print "Refreshing!"
