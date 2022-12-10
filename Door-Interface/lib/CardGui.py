@@ -127,6 +127,6 @@ class CardGui:
         if self.dialog is not None:
             try:
                 self.dialog.destroy()
-            except Exception as ex
+            except Exception as ex:
                 print ex
             self.dialog = None
