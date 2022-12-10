@@ -35,7 +35,7 @@ class CardGui:
         title.pack()
 
     def fetch_data(self):
-        r = requests.get(self.url, params = {'door': self.door, 'key': self.key})
+        r = requests.get(self.url, params = {'door': self.door, 'key': self.key}, verify=False)
         data = r.json()
         self.cards = data['allowed_card']
         self.load_cards()
