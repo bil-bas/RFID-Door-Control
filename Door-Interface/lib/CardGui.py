@@ -21,6 +21,7 @@ class CardGui:
         self.key = self.config.get('fetch', 'api_key')
         self.cards = []
         self.dialog = None
+        self._interface = None
 
     def run(self):
         self.init()
@@ -32,13 +33,14 @@ class CardGui:
         self.button_refresh()
         self.listbox_cards()
         self.button_write()
+        self.button_read()
 
     def label_title(self):
         title = Label(self.tk, text="Select a Card/Fob to Write")
         title.pack()
 
     def fetch_data(self):
-        r = requests.get(self.url, params = {'door': self.door, 'key': self.key}, verify=False)
+        r = requests.get(self.url, params={'door': self.door, 'key': self.key}, verify=False)
         data = r.json()
         self.cards = data['allowed_card']
         self.list_var.set(tuple(c["user_name"] for c in self.cards))
@@ -54,34 +56,42 @@ class CardGui:
     def callback_write(self):
         print("Writing")
         card = self.current_card
-        print("Writing Card for {}, User: {}, Card: {}".format(card['user_name'], self.card["user_id"], self.card["card_key"]))
-        self.msg_box("Notice", "Place Card/Fob on reader", False)
+        print("Writing Card for ", self.describe_card(card))
+        self.msg_box("Notice", "Place Card/Fob on RFID writer", False)
         self.tk.after(100, self.background_write)
+
+    @static
+    def describe_card(self, card):
+        return card['user_name'] + "User: " + card["user_id"] + "Card: " + card["card_key"]
 
     @property
     def current_card(self):
         card_index = self.list_view.index(ACTIVE)
         return self.cards[card_index]
 
+    @property
+    def interface(self):
+        if self._interface is None:
+            self._interface = DoorInterface(self.config_path)
+            self._interface.print_reader_version()
+        return self._interface
+
     def background_write(self):
-        interface = DoorInterface(self.config_path)
-        interface.print_reader_version()
-        
-        uid = interface.read_card_id()
-        if uud is None:
+        uid = self.interface.read_card_id()
+        if uid is None:
             self.tk.after(100, self.background_write)
             return
 
         print('Found card with UID: 0x{0}'.format(binascii.hexlify(uid)))
         
-        if interface.set_key(uid):
+        if self.interface.set_key(uid):
             print("Set new card key")
         else:
             print("Card key already set")
             
-        if interface.read_id_block(uid):
+        if self.interface.read_id_block(uid):
             print("Writing card with new user id")
-            if interface.set_id(uid, card['card_key']):
+            if self.interface.set_id(uid, card['card_key']):
                 self.msg_box("Success", "Wrote id correctly")
             else:
                 self.msg_box("Warning", "Failed to write card?!?!")
@@ -91,19 +101,46 @@ class CardGui:
     def button_write(self):
         button = Button(self.tk, text="Write", command=self.callback_write, state=DISABLED)
         button.pack()
+
+    def button_read(self):
+        button = Button(self.tk, text="Write", command=self.callback_read)
+        button.pack()
+
+    def callback_read(self):
+        print("reading")
+        self.msg_box("Notice", "Place Card/Fob on RFID reader", False)
+        self.tk.after(100, background_read)
+
+    def background_read(self):
+        uid = self.interface.read_card_id()
+        if uid is None:
+            self.tk.after(100, self.background_write)
+            return
+
+        print('Found card with UID: 0x{0}'.format(binascii.hexlify(uid)))
+
+        id = self.interface.get_id(uid)
+        for card in self.cards:
+            if card["user_id"] == id:
+                print("Card for ", self.describe_card(card))
+                self.msg_box("Success", "Card is for " + self.describe_card(card))
+                return
+
+        self.msg_box("Success", "Card is not set for anyone")
     
     def listbox_cards(self):
         self.list_var = StringVar()
         self.list_view = Listbox(self.tk, listvariable=self.list_var)
         self.list_view.pack(expand=True, fill="both", padx=(16, 16), pady=(16, 16))
         self.list_view.bind("<<ListboxSelect>>", self.list_item_selected)
+
     def list_item_selected(self):
         self.button_write["state"] = NORMAL
 
     def msg_box(self, title, msg, show_button=True):
         self.close_msg_box()
        
-        self.dialog = Toplevel(self.tk)
+        self.dialog = Toplevel(self.tk, padx=(16, 16), pady=(16, 16))
         self.dialog.grab_set()
         self.dialog.title(title)
         Label(self.dialog, text=msg).pack()

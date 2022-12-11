@@ -30,7 +30,7 @@ class DoorInterface:
 
   def print_reader_version(self):
     ic, ver, rev, support = self.rfid_reader.get_firmware_version()
-    print 'Found PN532 with firmware version: {0}.{1}'.format(ver, rev)
+    print('Found PN532 with firmware version: {0}.{1}'.format(ver, rev))
 
   def read_card_id(self):
     return self.rfid_reader.read_passive_target()
@@ -76,7 +76,11 @@ class DoorInterface:
     return self.write_block(uid, self.key_block, new_key_data, self.__key_default)
 
   def set_id(self, uid, card_key):
-    return self.write_block( uid, self.id_block, get_hex_array(card_key))
+    return self.write_block(uid, self.id_block, get_hex_array(card_key))
+
+  def get_id(self, uid):
+    return self.read_id_block(uid)
+
 
 def get_hex_array ( string ):
   return map( ord, string.decode( "hex" ) )
