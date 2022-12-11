@@ -1,9 +1,12 @@
+from __future__ import absolute_import, print_function, division, unicode_literals
+
 from Tkinter import *
 import ConfigParser
 import requests
 from DoorInterfaceNoDb import DoorInterface
 import RPi.GPIO as GPIO
 import binascii
+
 
 class CardGui:
 
@@ -18,7 +21,7 @@ class CardGui:
         self.key = self.config.get('fetch', 'api_key')
         self.cards = []
         self.dialog = None
-     
+
     def run(self):
         self.init()
         self.tk.after(100, self.fetch_data)
@@ -41,7 +44,7 @@ class CardGui:
         self.list_var.set(tuple(c["user_name"] for c in self.cards))
 
     def callback_refresh(self):
-        print "Refreshing!"
+        print("Refreshing!")
         self.fetch_data()
 
     def button_refresh(self):
@@ -49,14 +52,17 @@ class CardGui:
         button.pack()
 
     def callback_write(self):
-        print "Writing"
-
-        card_index = self.list_view.index(ACTIVE)
-        self.card = self.cards[card_index]
-        print "Writing Card for {}, User: {}, Card: {}".format(card['user_name'], self.card["user_id"], self.card["card_key"])
+        print("Writing")
+        card = self.current_card
+        print("Writing Card for {}, User: {}, Card: {}".format(card['user_name'], self.card["user_id"], self.card["card_key"]))
         self.msg_box("Notice", "Place Card/Fob on reader", False)
         self.tk.after(100, self.background_write)
-    
+
+    @property
+    def current_card(self):
+        card_index = self.list_view.index(ACTIVE)
+        return self.cards[card_index]
+
     def background_write(self):
         interface = DoorInterface(self.config_path)
         interface.print_reader_version()
@@ -66,15 +72,15 @@ class CardGui:
             self.tk.after(100, self.background_write)
             return
 
-        print 'Found card with UID: 0x{0}'.format(binascii.hexlify(uid))
+        print('Found card with UID: 0x{0}'.format(binascii.hexlify(uid)))
         
         if interface.set_key(uid):
-            print "Set new card key"
+            print("Set new card key")
         else:
-            print "Card key already set"
+            print("Card key already set")
             
         if interface.read_id_block(uid):
-            print "Writing card with new user id"
+            print("Writing card with new user id")
             if interface.set_id(uid, card['card_key']):
                 self.msg_box("Success", "Wrote id correctly")
             else:
@@ -90,7 +96,9 @@ class CardGui:
         self.list_var = StringVar()
         self.list_view = Listbox(self.tk, listvariable=self.list_var)
         self.list_view.pack(expand=True, fill="both", padx=(16, 16), pady=(16, 16))
-        self.list_view.bind("<<ListboxSelect>>", lambda: self.button_write["state"] = NORMAL)
+        self.list_view.bind("<<ListboxSelect>>", self.list_item_selected)
+    def list_item_selected(self):
+        self.button_write["state"] = NORMAL
 
     def msg_box(self, title, msg, show_button=True):
         self.close_msg_box()
@@ -107,5 +115,5 @@ class CardGui:
             try:
                 self.dialog.destroy()
             except Exception as ex:
-                print ex
+                print(ex)
             self.dialog = None

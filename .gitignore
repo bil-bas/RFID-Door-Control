@@ -6,3 +6,4 @@ config.cfg
 *~
 *.pyc
 Door-Interface/env
+/.idea/
