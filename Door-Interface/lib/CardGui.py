@@ -15,6 +15,7 @@ class CardGui:
         self.config_path = path
         self.config.read(path)
         self.tk = Tk()
+        self.tk.title("LAMM RFID")
         self.tk.geometry("250x600")
         self.url = self.config.get('fetch', 'endpoint')
         self.door = self.config.get('main', 'door')
@@ -61,7 +62,7 @@ class CardGui:
         self.tk.after(100, self.background_write)
 
     def describe_card(self, card):
-        return card['user_name'] + "User: " + card["user_id"] + "Card: " + card["card_key"]
+        return card['user_name'] + "User: " + str(card["user_id"]) + "Card: " + card["card_key"]
 
     @property
     def current_card(self):
@@ -88,18 +89,17 @@ class CardGui:
         else:
             print("Card key already set")
             
-        if self.interface.read_id_block(uid):
-            print("Writing card with new user id")
-            if self.interface.set_id(uid, card['card_key']):
-                self.msg_box("Success", "Wrote id correctly")
-            else:
-                self.msg_box("Warning", "Failed to write card?!?!")
+        uid = self.interface.read_card_id()  
+       
+        print("Writing card for", self.describe_card(self.curent_card))
+        if self.interface.set_id(uid, card['card_key']):
+            self.msg_box("Success", "Wrote id correctly")
         else:
-            self.msg_box("Warning", "Possible new card, flash new first")        
+            self.msg_box("Warning", "Failed to write card?!?!")
 
     def button_write(self):
-        button = Button(self.tk, text="Write", command=self.callback_write, state=DISABLED)
-        button.pack()
+        self.write_button = Button(self.tk, text="Write", command=self.callback_write, state=DISABLED)
+        self.write_button.pack()
 
     def button_read(self):
         button = Button(self.tk, text="Read", command=self.callback_read)
@@ -119,13 +119,14 @@ class CardGui:
         print('Found card with UID: 0x{0}'.format(binascii.hexlify(uid)))
 
         id = self.interface.get_id(uid)
+        card_key = binascii.hexlify(id)
         for card in self.cards:
-            if card["user_id"] == id:
+            if card["user_id"] == card_key:
                 print("Card for ", self.describe_card(card))
-                self.msg_box("Success", "Card is for " + self.describe_card(card))
+                self.msg_box("Success", "Card is for " + card["user_name"])
                 return
 
-        self.msg_box("Success", "Card is not set for anyone")
+        self.msg_box("Success", "Card is not set for a recognised user")
     
     def listbox_cards(self):
         self.list_var = StringVar()
@@ -133,8 +134,8 @@ class CardGui:
         self.list_view.pack(expand=True, fill="both", padx=(16, 16), pady=(16, 16))
         self.list_view.bind("<<ListboxSelect>>", self.list_item_selected)
 
-    def list_item_selected(self):
-        self.button_write["state"] = NORMAL
+    def list_item_selected(self, event):
+        self.write_button["state"] = NORMAL
 
     def msg_box(self, title, msg, show_button=True):
         self.close_msg_box()
