@@ -121,7 +121,7 @@ class CardGui:
         id = self.interface.get_id(uid)
         card_key = binascii.hexlify(id)
         for card in self.cards:
-            if card["user_id"] == card_key:
+            if card["card_key"] == card_key:
                 print("Card for ", self.describe_card(card))
                 self.msg_box("Success", "Card is for " + card["user_name"])
                 return
