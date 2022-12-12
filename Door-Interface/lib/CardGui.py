@@ -60,7 +60,6 @@ class CardGui:
         self.msg_box("Notice", "Place Card/Fob on RFID writer", False)
         self.tk.after(100, self.background_write)
 
-    @static
     def describe_card(self, card):
         return card['user_name'] + "User: " + card["user_id"] + "Card: " + card["card_key"]
 
@@ -103,7 +102,7 @@ class CardGui:
         button.pack()
 
     def button_read(self):
-        button = Button(self.tk, text="Write", command=self.callback_read)
+        button = Button(self.tk, text="Read", command=self.callback_read)
         button.pack()
 
     def callback_read(self):
@@ -140,7 +139,7 @@ class CardGui:
     def msg_box(self, title, msg, show_button=True):
         self.close_msg_box()
        
-        self.dialog = Toplevel(self.tk, padx=(16, 16), pady=(16, 16))
+        self.dialog = Toplevel(self.tk)
         self.dialog.grab_set()
         self.dialog.title(title)
         Label(self.dialog, text=msg).pack()
