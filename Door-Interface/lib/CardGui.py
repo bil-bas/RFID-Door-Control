@@ -91,7 +91,7 @@ class CardGui:
             
         uid = self.interface.read_card_id()  
        
-        print("Writing card for", self.describe_card(self.curent_card))
+        print("Writing card for", self.describe_card(self.current_card))
         if self.interface.set_id(uid, card['card_key']):
             self.msg_box("Success", "Wrote id correctly")
         else:
