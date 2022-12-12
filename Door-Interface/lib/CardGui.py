@@ -108,12 +108,12 @@ class CardGui:
     def callback_read(self):
         print("reading")
         self.msg_box("Notice", "Place Card/Fob on RFID reader", False)
-        self.tk.after(100, background_read)
+        self.tk.after(100, self.background_read)
 
     def background_read(self):
         uid = self.interface.read_card_id()
         if uid is None:
-            self.tk.after(100, self.background_write)
+            self.tk.after(100, self.background_read)
             return
 
         print('Found card with UID: 0x{0}'.format(binascii.hexlify(uid)))
